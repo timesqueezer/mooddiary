@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html ng-app="mooddiary" ng-cloak>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>MoodDiary</title>
+        <base href="{{ request.url_root }}">
+
+        {% assets "css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+        {% endassets %}
+
+        {% assets "js" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
+        <link rel="shortcut icon" href="{{ url_for('main.send_favicon') }}">
+        <link rel="apple-touch-icon" href="{{ url_for('main.send_favicon') }}">
+
+        <script type="text/javascript">
+
+        angular.module("mooddiary.config", [])
+
+        {% if config.get('DEBUG') != true %}
+
+        .config(['$compileProvider', function($compileProvider) {
+            $compileProvider.debugInfoEnabled(false);
+        }])
+
+        {% endif %}
+
+        </script>
+    </head>
+{% raw %}
+    <body ng-controller="myAppControl" id="bodyLOL">
+        <div class="container">
+            <nav class="navbar navbar-default" ng-controller="NavCtrl">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" ui-sref="about">
+                            MoodDiary {% endraw %}{% if user_use_colors %}WOHOHOHOHLLLLLLLLL{% endif %}{% raw %}
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li ng-class="{active: $state.includes('about')}"><a ui-sref="about" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-info"></i> <span i18n="common.menu_about"></span></a></li>
+                            <li ng-show="$root.loggedIn" ng-class="{active: $state.includes('diary')}"><a ui-sref="diary.list" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-book"></i> <span i18n="common.menu_diary"></span></a></li>
+                            <li ng-show="$root.loggedIn" ng-class="{active: $state.includes('settings')}"><a ui-sref="settings" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-cogs"></i> <span i18n="common.menu_settings"></span></a></li>
+                            <li ng-if="$root.loggedIn && me.is_admin" ng-class="{active: $state.includes('admin')}"><a ui-sref="admin" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-lock"></i> Admin</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <button ng-hide="$root.loggedIn" class="btn btn-link navbar-btn" ui-sref="login" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-sign-in"></i> Login</button>
+                                <p class="navbar-text" ng-show="$root.loggedIn"><i class="fa fa-user"></i> {{ me.email }} | <strong ng-show="me.first_name && me.last_name">{{ me.first_name }} {{ me.last_name }}</strong></p>
+                                <button ng-show="$root.loggedIn" class="btn btn-link navbar-btn" ng-click="logout()" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-sign-out"></i> Logout</button>
+                            </li>
+                            <li ng-hide="$root.loggedIn">
+                                <button class="btn btn-link navbar-btn" ui-sref="register" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-sign-in"></i> <span i18n="common.register"></span></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div ui-view>
+                <h2 class="text-center"><i style="color: #444;" class="fa fa-spinner fa-pulse"></i></h2>
+            </div>
+        </div>
+        <div id="alert-container"></div>
+        <div class="center-block text-center spaced-bottom footer" ng-controller="LanguageCtrl">
+            &copy;2015 Matz Radloff - <a href="mailto:matzradloff@gmail.com">Contact</a> - <a ui-sref="disclaimer">Disclaimer</a> - <a ui-sref="privacy" i18n="common.privacy"></a> - <a href="https://github.com/timesqueezer/mooddiary"><i class="fa fa-github"></i> GitHub</a> -
+            <div class="btn-group">
+                <button ng-repeat="lang in supportedLang" class="btn bt-xs btn-link" ng-click="setLocale(lang)">
+                    <span class="flag-icon" ng-class="localeData[lang].flagClass"></span>
+                </button>
+            </div>
+        </div>
+{% endraw %}
+        <!-- Piwik -->
+        {% if config['DEBUG'] == False %}
+        <script type="text/javascript">
+          var _paq = _paq || [];
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function() {
+            var u="//mooddiary.org/stats/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 1]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+          })();
+        </script>
+        <noscript><p><img src="//mooddiary.org/stats/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+        <!-- End Piwik Code -->
+        {% endif %}
+    </body>
+</html>

@@ -1,0 +1,32 @@
+{% raw %}
+<div class="panel panel-default">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th ng-repeat="field in fields" ng-class="{'text-white': me.use_colors}" ng-style="field.colorStyle">{{ field.name }}</th>
+            </tr>
+        </thead>
+        <tbody infinite-scroll="loadMore()" infinite-scroll-immediate-check="true" infinite-scroll-distance="1" infinite-scroll-disabled="stopScroll">
+            <tr ng-repeat="entry in entries = (me.entries | orderBy: 'date' : true | limitTo: listLimit)">
+                <td>{{ entry.date | date : 'dd/MM' }}</td>
+                <td ng-repeat="field in fields" ng-style="field.colorStyleRGBA">{{ entry.answersSorted[field.id].content }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endraw %}
+
+{%if config.get('DEBUG') %}
+<div class="panel panel-default panel-body" style="position:fixed;top:10px;left:10px;width:360px;visibility:hidden;">
+{% raw %}
+    <p>listLimit: {{ listLimit }}</p>
+    <p>entries.length: {{ entries.length }}</p>
+    <p>me.entries.length: {{ me.entries.length }}</p>
+    <p>reloadCount: {{ reloadCount }}</p>
+    <p>args:</p>
+    <pre>{{ args | json }}</pre>
+</div>
+
+{% endraw %}
+{% endif %}

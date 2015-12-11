@@ -1,0 +1,42 @@
+{
+  "name": "mooddiary",
+  "version": "1.0.0",
+  "description": "Diary for moods and more",
+  "license": "mit",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.3.16",
+    "angular-animate": "~1.3.16",
+    "angular-chart.js": "latest",
+    "angular-cookies": "~1.4.4",
+    "angular-grecaptcha": "1.0.x",
+    "angular-localization": "~1.2.1",
+    "angular-recaptcha": "~2.2.5",
+    "angular-resource": "latest",
+    "angular-restmod": "~1.1.9",
+    "angular-sanitize": "~1.4.4",
+    "angular-strap": "2.2.4",
+    "angular-ui-router": "latest",
+    "bca-flag-sprite": "~1.0.0",
+    "bootstrap": "latest",
+    "bootswatch": "latest",
+    "Chart.js": "latest",
+    "flag-icon-css": "~0.7.1",
+    "fontawesome": "latest",
+    "jquery": "latest",
+    "underscore": "latest",
+    "ngInfiniteScroll": "https://github.com/timesqueezer/ngInfiniteScroll.git#master",
+    "moment": "~2.10.6",
+    "Chart.Scatter": "https://github.com/timesqueezer/Chart.Scatter.git#master",
+    "ngSmoothScroll": "~2.0.0",
+    "angular-spectrum-colorpicker": "~1.4.2"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "resolutions": {
+    "angular": "~1.3.16"
+  }
+}

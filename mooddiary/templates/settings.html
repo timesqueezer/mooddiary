@@ -1,0 +1,140 @@
+{% raw %}
+<h2 i18n="common.menu_settings"></h2>
+<div class="panel panel-default panel-body">
+    <button class="btn btn-lg btn-link visible-xs pull-right" style="margin-top: 1.2em;" data-toggle="collapse" data-target="#profileEditForm" aria-controls="profileEditForm"><i class="fa fa-bars"></i></button>
+    <h3>Account</h3>
+    <form id="profileEditForm" name="profileEditForm" class="form collapse in" novalidate>
+        <div class="row">
+            <div class="col-md-6">
+                <legend i18n="common.user_information"></legend>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" name="email" type="email" placeholder="Email" ng-model="me.email">
+                </div>
+                <div class="form-group">
+                    <label i18n="common.user_firstname"></label>
+                    <input class="form-control" name="first_name" type="text" i18n-attr="{placeholder: 'common.user_firstname'}" ng-model="me.first_name">
+                </div>
+                <div class="form-group">
+                    <label i18n="common.user_lastname"></label>
+                    <input class="form-control" name="last_name" type="text" i18n-attr="{placeholder: 'common.user_lastname'}" ng-model="me.last_name">
+                </div>
+                <legend i18n="common.colors"></legend>
+                <div class="form-group">
+                    <div class="btn-group" ng-model="me.use_colors" bs-radio-group>
+                        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="true"><span i18n="common.yes"></span></label>
+                        <label class="btn btn-default"><input type="radio" class="btn btn-default" value="false"><span i18n="common.no"></span></label>
+                    </div>
+                </div>
+                <div ng-show="showReloadAlert" class="info-text">
+                    <p i18n="common.reload_alert"></p>
+                    <a href="/" class="btn btn-danger" i18n="common.reload"></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <legend i18n="common.password"></legend>
+                <div class="form-group">
+                    <label i18n="common.password"></label>
+                    <input class="form-control" name="password" type="password" i18n-attr="{placeholder: 'common.password'}" ng-model="me.password">
+                </div>
+                <div class="form-group">
+                    <label i18n="common.password_repeat"></label>
+                    <input class="form-control" name="password2" type="password" i18n-attr="{placeholder: 'common.password_repeat'}" ng-model="password2">
+                </div>
+
+                <legend i18n="common.language"></legend>
+                <div class="form-group" ng-controller="LanguageCtrl">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="flag-icon" ng-class="flagClass"></span> {{ langDisplayText }} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="lang in supportedLang">
+                                <a href="" ng-click="setLocale(lang)">
+                                    <span class="flag-icon" ng-class="localeData[lang].flagClass"></span>
+                                    <span>{{ localeData[lang].langDisplayText }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit" ng-click="saveProfile()" i18n="common.save"></button>
+    </form>
+</div>
+<div class="panel panel-default panel-body">
+    <button class="btn btn-lg btn-link visible-xs pull-right" style="margin-top: 1.2em;" data-toggle="collapse" data-target="#fieldContent" aria-controls="fieldContent"><i class="fa fa-bars"></i></button>
+    <h3 i18n="common.fields"></h3>
+    <div id="fieldContent" class="collapse in">
+        <p class="info-text" i18n="common.category_help_text"></p>
+        <div class="row row-spaced" ng-repeat="row in (fields.length/2 | array)">
+            <div class="col-sm-6" ng-repeat="field in fields.slice(2*$index, 2*$index + 2)">
+                <h4>
+                    <button class="btn btn-link pull-right" ng-click="deleteField(field)"><i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-link pull-right" ng-click="editField(field)"><i class="fa fa-pencil-square-o"></i></button>
+                    <div>
+                        <div ng-style="getFieldStyle(field.color)" class="img-thumbnail"></div>
+                        {{ field.name }} <small>{{ field.type | fieldTypeToString }}</small>
+                    </div>
+                </h4>
+            </div>
+        </div>
+        <button class="btn btn-primary" ng-click="editField()" ng-hide="editOrAddField"><i class="fa fa-plus"></i> <span i18n="common.add"></span></button>
+    </div>
+</div>
+<div class="panel panel-default panel-body" ng-show="editOrAddField" id="editOrAddContainer">
+    <form name="fieldAddForm" class="form" novalidate>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" name="name" type="text" placeholder="Name" ng-model="newField.name">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" ng-hide="edittingField">
+                    <label i18n="common.type"></label>
+                    <select class="form-control" name="type" ng-model="newField.type" id="typeSelect">
+                        <option value="1" i18n="common.field_string"></option>
+                        <option value="2" i18n="common.field_range" selected="selected"></option>
+                        <option value="3" i18n="common.field_integer"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label i18n="common.color"></label>
+                            <div class="row">
+                                <div class="col-xs-3" ng-repeat="style in defaultColorStyles">
+                                    <div ng-style="style[0]" class="img-thumbnail" ng-click="setStyle(style)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label i18n="common.custom_color"></label>
+                            <spectrum-colorpicker ng-model="tmpColor" format="'hex'" on-change="colorFromPicker(color)" options="{showInput: false, showAlpha:false, flat: true, showButtons: false, color: '#'+newField.color}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label i18n="common.selected_color"></label>
+                            <div ng-style="selectedColorStyle" class="img-thumbnail"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-block btn-primary" type="submit" ng-click="addField()"><span i18n="common.save"></span></button>
+                <button class="btn btn-block btn-danger" type="reset" ng-click="resetForm()"><span i18n="common.cancel"></span></button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endraw %}
