@@ -73,9 +73,10 @@ angular.module('mooddiary', [
     $httpProvider.interceptors.push('authInterceptor');
 }])
 
-.run(['AuthService', '$rootScope', 'locale', '$anchorScroll', '$state', '$window', '$location', function(AuthService, $rootScope, locale, $anchorScroll, $state, $window, $location) {
+.run(['AuthService', '$rootScope', 'locale', '$anchorScroll', '$state', '$window', function(AuthService, $rootScope, locale, $anchorScroll, $state, $window) {
     AuthService.checkAndSetLogin().then(function() {
         locale.setLocale($rootScope.me.language);
+        //$state.go('diary.list');
     }, function() {
         locale.setLocale('de-DE');
         $rootScope.me = null;
@@ -88,9 +89,7 @@ angular.module('mooddiary', [
     });
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        if (error && error.status == 404) {
-            $state.go('about');
-        } else if (error && error.status == 401) {
+        if (error && error.status == 404 || error.status == 401) {
             $state.go('about');
         }
 
@@ -113,7 +112,7 @@ angular.module('mooddiary', [
 .config(['$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$locationProvider', 'restmodProvider', function($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider, restmodProvider) {
     $locationProvider.html5Mode(true);
     $urlMatcherFactoryProvider.strictMode(false);
-	$urlRouterProvider.otherwise('/about');
+    $urlRouterProvider.otherwise('/about');
 
     restmodProvider.rebase('MoodDiaryApi');
 
@@ -199,14 +198,14 @@ function($scope, $alert, $rootScope, fieldsResolved, Me, locale, localeSupported
     $scope.getColorStyle = function(color, clickable) {
         clickable = clickable || false;
         if (clickable)
-            return [{'background-color': color, 'height': '80px', 'width': '100%', 'cursor': 'pointer'}, color];
+            return [{'background-color': '#' + color, 'height': '80px', 'width': '100%', 'cursor': 'pointer'}, color];
         else
-            return [{'background-color': color, 'height': '80px', 'width': '100%', 'border-radius': '3px'}, color];
+            return [{'background-color': '#' + color, 'height': '80px', 'width': '100%', 'border-radius': '3px'}, color];
     };
 
     // Field circle-dots
     $scope.getFieldStyle = function(color) {
-        return {'background-color': color, 'height': '30px', 'width': '30px', 'vertical-align': 'middle', 'border-radius': '30px'};
+        return {'background-color': '#' + color, 'height': '30px', 'width': '30px', 'vertical-align': 'middle', 'border-radius': '30px'};
     };
 
     $scope.addField = function() {
@@ -248,7 +247,7 @@ function($scope, $alert, $rootScope, fieldsResolved, Me, locale, localeSupported
     };
 
     $scope.setStyle = function(style) {
-        $scope.tmpColor = '#'+style[1];
+        $scope.tmpColor = '#' + style[1];
         $scope.selectedColorStyle = style[0];
         $scope.newField.color = style[1];
     };

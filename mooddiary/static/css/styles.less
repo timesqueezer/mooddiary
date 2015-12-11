@@ -276,10 +276,10 @@ label {
 .form-control[type=email],
 select.form-control {
     font-size: 14pt !important;
-    background: #c4dff3;
+    background-color: #E4E4E4;
     padding: 5px !important;
     color: #000;
-    box-shadow: inset 0 0 3px #bbb !important;
+    box-shadow: inset 0 0 2px #bbb !important;
     &::-webkit-input-placeholder {
         color: #888;
     }
@@ -295,6 +295,10 @@ select.form-control {
     &:-ms-input-placeholder {
        color: #888;
     }
+}
+select.form-control {
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
 input[type=range] {
