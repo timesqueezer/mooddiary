@@ -1,0 +1,2 @@
+[servers]
+192.168.2.103 ansible_python_interpreter="/usr/bin/env python2" pipelining=True

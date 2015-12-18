@@ -1,0 +1,27 @@
+---
+
+- name: update pacman cache
+  pacman: update_cache=yes
+
+- name: install ntp
+  pacman: name=ntp state=present
+
+- name: start and enable ntp
+  service: name=ntpd enabled=yes state=started
+
+- name: configure locales
+  copy: src=locale.conf dest=/etc/locale.conf owner=root group=root mode=0644
+
+- name: add user
+  user: name=ralph groups=http,wheel system=yes state=present createhome=yes
+
+- name: add authorized keys
+  authorized_key: user=ralph key="{{ item }}" manage_dir=yes
+  with_lines:
+    - cat authorized_keys
+
+- name: copy ssh key
+  copy: src="{{ item }}" dest=/home/ralph/.ssh/ owner=ralph group=ralph mode=600
+  with_items:
+    - id_rsa
+    - id_rsa.pub

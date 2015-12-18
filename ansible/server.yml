@@ -1,0 +1,8 @@
+---
+
+- name: server setup
+  hosts: servers
+  remote_user: root
+  
+  roles:
+    - role: common
