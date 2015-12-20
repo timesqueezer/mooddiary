@@ -1,0 +1,47 @@
+server {
+	listen	80;
+	listen	[::]:80;
+	server_name .mooddiary.org;
+	return 301 https://mooddiary.org$request_uri;
+}
+
+server {
+	listen	443;
+	listen	[::]:443;
+	server_name	*.mooddiary.org;
+
+	ssl_certificate /etc/ssl/private/ssl-unified.crt;
+	ssl_certificate_key /etc/ssl/private/server.key;
+
+	return 301 https://mooddiary.org$request_uri;
+
+}
+server {
+	listen       443 ssl;
+	listen	     [::]:443 ssl;
+	server_name  mooddiary.org;
+
+	ssl_certificate /etc/ssl/private/ssl-unified.crt;
+	ssl_certificate_key /etc/ssl/private/server.key;
+
+	access_log	/var/log/nginx/mooddiary_access.log;
+	error_log	/var/log/nginx/mooddiary_error.log;
+
+	location / {
+		include		uwsgi_params;
+		uwsgi_pass	unix:/run/uwsgi/mooddiary.sock;
+
+	}
+
+	location /stats/ {
+		include mime.types;
+		root /srv;
+		location ~ \.php$ {
+			include fastcgi_params;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_pass	unix:/run/php-fpm/php-fpm.sock;
+			fastcgi_index	index.php;
+		}
+	}
+
+}

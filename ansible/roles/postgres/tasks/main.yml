@@ -1,0 +1,18 @@
+---
+
+- name: install postgres
+  pacman: name=postgresql,python2-psycopg2 state=present
+
+- name: initialize postgres
+  become: yes
+  become_user: postgres
+  become_method: su
+  command: initdb --locale en_US.UTF-8 -E UTF8 -D '/var/lib/postgres/data'
+  args:
+    chdir: /var/lib/postgres
+    creates: /var/lib/postgres/data/postgresql.conf
+  notify:
+    - postgres restart
+
+- name: start and enable postgres
+  service: name=postgresql enabled=yes state=started

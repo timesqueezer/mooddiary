@@ -1,0 +1,32 @@
+---
+
+- name: install nginx
+  pacman: name=nginx state=present
+
+- name: copy nginx config
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=644
+  notify:
+    - nginx restart
+
+- name: create available servers directory
+  file: state=directory path=/etc/nginx/servers-available owner=root group=root mode=755
+
+- name: copy vhosts
+  copy: src=vhosts/{{ item }} dest=/etc/nginx/servers-available/{{ item }} owner=root group=root directory_mode=755
+  with_items: nginx_vhosts
+
+- name: create enabled servers directory
+  file: state=directory path=/etc/nginx/servers-enabled owner=root group=root mode=755
+
+- name: create log directories
+  file: state=directory path=/var/log/nginx/"{{ item }}" owner=http group=log mode=750
+  with_items: nginx_vhosts
+
+- name: symlink vhosts
+  file: state=link path=/etc/nginx/servers-enabled/"{{ item }}" src=/etc/nginx/servers-available/"{{ item }}"
+  with_items: nginx_vhosts
+  notify:
+    - nginx restart
+
+- name: start and enable nginx
+  service: name=nginx enabled=yes state=started

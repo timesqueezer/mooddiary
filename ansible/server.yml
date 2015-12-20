@@ -3,6 +3,12 @@
 - name: server setup
   hosts: servers
   remote_user: root
+
+  vars:
+    - nginx_vhosts:
+      - mooddiary
   
   roles:
     - role: common
+    - role: nginx
+    - role: postgres
