@@ -7,8 +7,12 @@
   vars:
     - nginx_vhosts:
       - mooddiary
-  
+      - councilofcode
+
   roles:
     - role: common
+    - role: ssl
     - role: nginx
     - role: postgres
+    - role: uwsgi
+    - role: tools

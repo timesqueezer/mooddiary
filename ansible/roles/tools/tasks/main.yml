@@ -1,0 +1,4 @@
+---
+
+- name: install useful suff
+  pacman: name:htop,nethogs,iftop,rsync,tmux,mtr,sshfs,dfc,mlocate,ranger,tree,dstat,the_silver_searcher,git state=present

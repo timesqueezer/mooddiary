@@ -1,0 +1,4 @@
+---
+
+- name: reload uwsgi emperor
+  service: name=emperor.uwsgi state=reloaded

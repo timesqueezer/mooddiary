@@ -1,0 +1,20 @@
+---
+
+- name: install uwsgi
+  pacman: name=uwsgi,uwsgi-plugin-python,uwsgi-plugin-python2 state=present
+
+- name: create uwsgi log directory
+  file: state=directory path=/var/log/uwsgi owner=http group=log mode=755
+
+- name: configure uwsgi emperor
+  copy: src=emperor.ini dest=/etc/uwsgi/emperor.ini owner=root group=root mode=644
+  notify:
+    - reload uwsgi emperor
+
+- name: configure uwsgi vassals default
+  copy: src=vassals-default.ini dest=/etc/uwsgi/vassals-default.ini owner=root group=root mode=644
+  notify:
+    - reload uwsgi emperor
+
+- name: start and enable uwsgi emperor
+  service: name=emperor.uwsgi enabled=yes state=started
