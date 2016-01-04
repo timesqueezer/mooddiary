@@ -10,8 +10,8 @@ server {
 	listen	[::]:443;
 	server_name	*.mooddiary.org;
 
-	ssl_certificate /etc/ssl/private/mooddiary.crt;
-	ssl_certificate_key /etc/ssl/keys/mooddiary.key;
+	ssl_certificate /etc/ssl/certs/mooddiary.crt;
+	ssl_certificate_key /etc/ssl/private/mooddiary.key;
 
 	return 301 https://mooddiary.org$request_uri;
 
@@ -21,8 +21,8 @@ server {
 	listen	     [::]:443 ssl;
 	server_name  mooddiary.org;
 
-	ssl_certificate /etc/ssl/private/mooddiary.crt;
-	ssl_certificate_key /etc/ssl/keys/mooddiary.key;
+	ssl_certificate /etc/ssl/certs/mooddiary.crt;
+	ssl_certificate_key /etc/ssl/private/mooddiary.key;
 
 	access_log	/var/log/nginx/mooddiary_access.log;
 	error_log	/var/log/nginx/mooddiary_error.log;

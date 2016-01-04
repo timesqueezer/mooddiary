@@ -1,0 +1,47 @@
+---
+
+- name: install mail packages
+  pacman: name=opensmtpd,dovecot state=present
+
+- name: configure opensmtpd
+  template: src={{ item }}.j2 dest=/etc/smtpd/{{ item }} owner=root group=root mode=644
+  with_items:
+    - smtpd.conf
+    - aliases
+  notify:
+    - restart opensmtpd
+    - restart dovecot
+
+- name: copy opensmtpd configs
+  copy: src={{ item }} dest=/etc/smtpd/{{ item }} owner=root group=root mode=644
+  with_items:
+    - vdomains
+    - vusers
+  notify:
+    - restart opensmtpd
+    - restart dovecot
+
+- name: copy opensmtpd secrets
+  copy: remote_src=True src=/home/matz/sec/opensmtpd/secrets dest=/etc/smtpd/secrets owner=root group=root mode=644
+  notify:
+    - restart opensmtpd
+    - restart dovecot
+
+- name: start and enable opensmtpd
+  service: name=smtpd enabled=yes state=started
+
+- name: add vmail user
+  user: name=vmail comment="Virtual Mail User" system=yes state=present createhome=yes
+
+- name: configure dovecot
+  copy: src=dovecot.conf dest=/etc/dovecot/dovecot.conf owner=root group=dovecot mode=640
+  notify:
+    - restart dovecot
+
+- name: copy additional dovecot conf
+  copy: src=10-custom.conf dest=/etc/dovecot/conf.d/10-custom.conf owner=root group=dovecot mode=0640
+  notify:
+    - restart dovecot
+
+- name: start and enable dovecot
+  service: name=dovecot enabled=yes state=started

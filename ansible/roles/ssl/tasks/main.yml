@@ -4,7 +4,7 @@
   command: openssl dhparam -out /etc/ssl/dhparams.pem 2048 creates=/etc/ssl/dhparams.pem
 
 - name: copy existing certificates
-  copy: owner=root group=root mode=644 src=/root/sec/certs/ dest=/etc/ssl/certs/
+  copy: owner=root group=root mode=644 remote_src=True src=/home/matz/sec/certs/ dest=/etc/ssl/certs/
 
 - name: copy existing private keys
-  copy: owner=root group=root mode=600 src=/root/sec/private/ dest=/etc/ssl/private/
+  copy: owner=root group=root mode=600 remote_src=True src=/home/matz/sec/private/ dest=/etc/ssl/private/

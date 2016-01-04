@@ -5,6 +5,7 @@
   remote_user: root
 
   vars:
+    - admin_email: admin@mooddiary.org
     - nginx_vhosts:
       - mooddiary
       - councilofcode
@@ -16,3 +17,4 @@
     - role: postgres
     - role: uwsgi
     - role: tools
+    - role: mail

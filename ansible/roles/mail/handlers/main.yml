@@ -1,0 +1,7 @@
+---
+
+- name: restart opensmtpd
+  service: name=smtpd state=restarted
+
+- name: restart dovecot
+  service: name=dovecot state=restarted

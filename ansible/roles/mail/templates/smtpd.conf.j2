@@ -1,0 +1,23 @@
+pki mooddiary.org certificate "/etc/ssl/certs/mooddiary.crt"
+pki mooddiary.org key "/etc/ssl/private/mooddiary.key"
+pki councilofcode.org certificate "/etc/ssl/certs/councilofcode.crt"
+pki councilofcode.org key "/etc/ssl/private/councilofcode.key"
+
+
+table aliases   file:/etc/smtpd/aliases
+table vdomains  file:/etc/smtpd/vdomains
+table vusers    file:/etc/smtpd/vusers
+table secrets   file:/etc/smtpd/secrets
+
+{% for if in ansible_interfaces %}
+{% if if == 'lo' %}
+listen on lo
+{% else %}
+listen on {{ if }} port 25 tls hostname mooddiary.org
+listen on {{ if }} port 587 tls-require auth <secrets> hostname mooddiary.org
+{% endif %}
+{% endfor %}
+
+accept from any for domain <vdomains> userbase <vusers> virtual <aliases> deliver to lmtp "/run/dovecot/lmtp"
+accept from any for local deliver to lmtp "/run/dovecot/lmtp"
+accept for any relay hostname mooddiary.org

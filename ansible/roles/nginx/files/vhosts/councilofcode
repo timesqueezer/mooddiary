@@ -2,7 +2,7 @@ server {
 	listen	80;
 	listen	[::]:80;
 	server_name .councilofcode.org;
-	return 301 https://mooddiary.org$request_uri;
+	return 301 https://councilofcode.org$request_uri;
 }
 
 server {
@@ -10,10 +10,10 @@ server {
 	listen	[::]:443;
 	server_name	*.councilofcode.org;
 
-	ssl_certificate /etc/ssl/private/councilofcode.crt;
-	ssl_certificate_key /etc/ssl/keys/councilofcode.key;
+	ssl_certificate /etc/ssl/certs/councilofcode.crt;
+	ssl_certificate_key /etc/ssl/private/councilofcode.key;
 
-	return 301 https://mooddiary.org$request_uri;
+	return 301 https://councilofcode.org$request_uri;
 
 }
 server {
@@ -21,16 +21,15 @@ server {
 	listen	     [::]:443 ssl;
 	server_name  councilofcode.org;
 
-	ssl_certificate /etc/ssl/private/councilofcode.crt;
+	ssl_certificate /etc/ssl/certs/councilofcode.crt;
 	ssl_certificate_key /etc/ssl/private/councilofcode.key;
 
-	access_log	/var/log/nginx/mooddiary_access.log;
-	error_log	/var/log/nginx/mooddiary_error.log;
+	access_log	/var/log/nginx/councilofcode_access.log;
+	error_log	/var/log/nginx/councilofcode_error.log;
 
 	location / {
-		include		uwsgi_params;
-		uwsgi_pass	unix:/run/uwsgi/mooddiary.sock;
-
+		include		mime.types;
+		root		/srv/councilofcode;
 	}
 
 }
