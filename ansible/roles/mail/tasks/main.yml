@@ -22,7 +22,10 @@
     - restart dovecot
 
 - name: copy opensmtpd secrets
-  copy: remote_src=True src=/home/matz/sec/opensmtpd/secrets dest=/etc/smtpd/secrets owner=root group=root mode=644
+  copy: remote_src=True src=/home/matz/sec/opensmtpd/{{ item }} dest=/etc/smtpd/{{ item }} owner=root group=root mode=644
+  with_items:
+    - secrets
+    - workaround-secrets
   notify:
     - restart opensmtpd
     - restart dovecot

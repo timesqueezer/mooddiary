@@ -7,7 +7,7 @@ pki councilofcode.org key "/etc/ssl/private/councilofcode.key"
 table aliases   file:/etc/smtpd/aliases
 table vdomains  file:/etc/smtpd/vdomains
 table vusers    file:/etc/smtpd/vusers
-table secrets   file:/etc/smtpd/secrets
+table secrets   file:/etc/smtpd/workaround-secrets
 
 {% for if in ansible_interfaces %}
 {% if if == 'lo' %}
