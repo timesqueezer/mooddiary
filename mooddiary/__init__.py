@@ -20,7 +20,6 @@ def create_app(config=None):
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/mooddiary.db'
 
     app.config['DEBUG'] = True
-    app.config['ASSETS_DEBUG'] = True
     app.config['LESS_BIN'] = os.path.realpath(os.path.join(os.path.dirname(__file__), '../node_modules/less/bin/lessc'))
 
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(days=28)
@@ -31,6 +30,8 @@ def create_app(config=None):
 
     if config:
         app.config.from_object(config)
+
+    app.config['ASSETS_DEBUG'] = app.config['DEBUG']
 
     db.init_app(app)
     migrate.init_app(app, db)
