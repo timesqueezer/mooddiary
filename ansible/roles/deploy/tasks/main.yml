@@ -23,13 +23,16 @@
   command: /usr/bin/make bower-packages chdir={{ app_path }}
 
 - name: remove old assets
-  file: state=absent path={{ app_path }}/traumwurst/static/gen
+  file: state=absent path={{ app_path }}/mooddiary/static/gen
 
 - name: remove assets cache
-  file: state=absent path={{ app_path }}/traumwurst/static/.webassets-cache
+  file: state=absent path={{ app_path }}/mooddiary/static/.webassets-cache
 
 - name: pre-generate flask-assets
   command: chdir={{ app_path }} ./manage.py assets build
+
+- name: ensure correct permissions for assets-cache folder
+  file: owner=matz group=http state=directory mode=660 recurse=yes path={{ app_path }}/mooddiary/static/.webassets-cache
 
 - name: touch uwsgi vassal
   file: state=touch path=/etc/uwsgi/vassals/mooddiary.ini
