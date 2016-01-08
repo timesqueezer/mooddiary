@@ -1,0 +1,9 @@
+---
+
+- hosts: servers
+  remote_user: root
+  vars:
+      app_path: /srv/mooddiary
+
+  roles:
+      - provision

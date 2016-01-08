@@ -1,0 +1,9 @@
+---
+
+- hosts: servers
+  remote_user: matz
+  vars:
+    - app_path: /srv/mooddiary
+
+  roles:
+    - deploy

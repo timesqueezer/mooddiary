@@ -1,6 +1,6 @@
 [uwsgi]
-virtualenv = /srv/mooddiary/env
-chdir = /srv/mooddiary
+virtualenv = {{ app_path}}/env
+chdir = {{ app_path }}
 module = run
 callable = app
 plugins = python

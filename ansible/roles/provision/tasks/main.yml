@@ -1,0 +1,16 @@
+---
+
+- name: install system packages
+  pacman: name=git,python-virtualenv,python-pip state=present
+
+- name: create mooddiary database
+  postgresql_db: login_user=postgres name=mooddiaryDb
+
+- name: create empty directory to clone into
+  file: owner=matz group=http mode=775 path={{ app_path }} state=directory
+
+- name: create nginx log directory
+  file: owner=http group=log mode=750 state=directory path=/var/log/nginx/mooddiary
+
+- name: configure traumwurst uwsgi
+  template: src=uwsgi_config.ini.j2 dest=/etc/uwsgi/vassals/mooddiary.ini owner=matz group=http mode=640

@@ -1,0 +1,35 @@
+---
+
+- name: pull git repo
+  register: gitstatus
+  git: accept_hostkey=yes
+       force=yes
+       repo=git@github.com:timesqueezer/mooddiary.git
+       dest={{ app_path }}
+
+- name: ensure the directory is owned by matz but writable by the http group
+  file: owner=matz group=http state=directory path={{ app_path }}
+
+- name: install pip stuff into virtualenv
+  pip: state=latest
+       requirements={{ app_path }}/requirements.txt
+       virtualenv={{ app_path }}/env
+       virtualenv_command=virtualenv3
+
+- name: install node stuff
+  npm: path={{ app_path }} state=latest
+
+- name: install bower stuff
+  command: /usr/bin/make bower-packages chdir={{ app_path }}
+
+- name: remove old assets
+  file: state=absent path={{ app_path }}/traumwurst/static/gen
+
+- name: remove assets cache
+  file: state=absent path={{ app_path }}/traumwurst/static/.webassets-cache
+
+- name: pre-generate flask-assets
+  command: chdir={{ app_path }} ./manage.py assets build
+
+- name: touch uwsgi vassal
+  file: state=touch path=/etc/uwsgi/vassals/mooddiary.ini
