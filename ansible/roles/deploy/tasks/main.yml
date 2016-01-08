@@ -32,7 +32,7 @@
   command: chdir={{ app_path }} ./manage.py assets build
 
 - name: ensure correct permissions for assets-cache folder
-  file: owner=matz group=http state=directory mode=660 recurse=yes path={{ app_path }}/mooddiary/static/.webassets-cache
+  file: owner=matz group=http state=directory mode=770 recurse=yes path={{ app_path }}/mooddiary/static/.webassets-cache
 
 - name: touch uwsgi vassal
   file: state=touch path=/etc/uwsgi/vassals/mooddiary.ini

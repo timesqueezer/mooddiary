@@ -387,7 +387,7 @@ function($scope, $rootScope, $filter, Me, entriesResolved, locale, $timeout, $wi
             }
         }
         $q.all(promises).then(function() {
-            $alert({content: locale.getString('common.save')});
+            $alert({content: locale.getString('common.changes_saved')});
             entry.$save(['date']).$then(function() {
                 $scope.edittingEntry[entry.id] = false;
                 $scope.saving = false;
