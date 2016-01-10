@@ -14,8 +14,8 @@
         </div>
     </div>
 </div>
-<div infinite-scroll="loadMore()" infinite-scroll-immediate-check="false" infinite-scroll-distance="1" infinite-scroll-disabled="stopScroll">
-    <div class="panel panel-default panel-body" ng-repeat="entry in entries = (me.entries | orderBy: 'date' : true | limitTo: listLimit)">
+<div infinite-scroll="loadMore()" infinite-scroll-immediate-check="true" infinite-scroll-distance="1" infinite-scroll-disabled="stopScroll">
+    <div class="panel panel-default panel-body" ng-repeat="entry in entries = (me.entries | limitTo: listLimit)">
         <div class="row" ng-if="!edittingEntry[entry.id]"><!-- Entry normal mode -->
             <div class="col-md-2 col-xs-12">
                 <button class="btn btn-lg btn-link visible-xs pull-right" style="margin-top: 1em;" ng-click="toggleEntry(entry)"><i class="fa fa-bars"></i></button>
@@ -48,7 +48,7 @@
             <div class="col-md-2 col-xs-12">
                 <div class="form-group">
                     <label class="control-label"><i class="fa fa-calendar"></i> <span i18n="common.date"></span></label>
-                    <input disabled type="text" class="form-control spaced-bottom" ng-model="entry.date" data-date-format="yyyy-MM-dd" data-date-type="date" data-min-date="02/10/86" data-max-date="today" data-autoclose="0" name="date" i18n-attr="{placeholder: 'common.date'}" bs-datepicker>
+                    <input type="text" class="form-control spaced-bottom" ng-model="entry.date" data-date-format="yyyy-MM-dd" data-date-type="date" data-min-date="02/10/86" data-max-date="today" data-autoclose="true" name="date" i18n-attr="{placeholder: 'common.date'}" bs-datepicker>
                     <a class="btn btn-sm btn-primary" ng-click="saveEntry(entry)" i18n="common.save"></a>
                     <h4 ng-show="saving" class="text-center"><i style="color: #444;" class="fa fa-spinner fa-pulse"></i></h4>
                 </div>

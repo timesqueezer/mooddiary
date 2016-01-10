@@ -42,11 +42,7 @@ angular.module('mooddiary.diary', [
             controller: 'DiaryListCtrl',
             resolve: {
                 'firstPage': ['Me', '$q', function(Me, $q) {
-                    if (Me.entries.length > 0) {
-                        return $q.when(true);
-                    } else {
-                        return Me.entries.$resolve({'page': 1, 'per_page': 2, sort_by: 'date', order: 'desc'}).$asPromise();
-                    }
+                    return Me.entries.$refresh({'page': 1, 'per_page': 2, sort_by: 'date', order: 'desc'}).$asPromise();
                 }]
             }
         })
@@ -57,11 +53,7 @@ angular.module('mooddiary.diary', [
             controller: 'DiaryListCtrl',
             resolve: {
                 'firstPage': ['Me', '$q', function(Me, $q) {
-                    if (Me.entries.length > 0) {
-                        return $q.when(true);
-                    } else {
-                        return Me.entries.$resolve({'page': 1, 'per_page': 12, sort_by: 'date', order: 'desc'}).$asPromise();
-                    }
+                    return Me.entries.$refresh({'page': 1, 'per_page': 12, sort_by: 'date', order: 'desc'}).$asPromise();
                 }]
             }
         })
