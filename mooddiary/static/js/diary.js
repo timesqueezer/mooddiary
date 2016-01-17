@@ -380,7 +380,9 @@ function($scope, $rootScope, $filter, Me, entriesResolved, locale, $timeout, $wi
         }
         $q.all(promises).then(function() {
             $alert({content: locale.getString('common.changes_saved')});
-            entry.$save(['date']).$then(function() {
+            entry.date = entry.tmpDate;
+            entry.$save(['date']).$then(function(entry) {
+                entry.tmpDate = entry.date;
                 $scope.edittingEntry[entry.id] = false;
                 $scope.saving = false;
             }, function(error) {
