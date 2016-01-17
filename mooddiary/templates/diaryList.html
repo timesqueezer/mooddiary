@@ -15,7 +15,7 @@
     </div>
 </div>
 <div infinite-scroll="loadMore()" infinite-scroll-immediate-check="true" infinite-scroll-distance="1" infinite-scroll-disabled="stopScroll">
-    <div class="panel panel-default panel-body" ng-repeat="entry in entries = (me.entries | orderBy: date : true | limitTo: listLimit)">
+    <div class="panel panel-default panel-body" ng-repeat="entry in entries = (me.entries | orderBy: 'date' : true | limitTo: listLimit)">
         <div class="row" ng-if="!edittingEntry[entry.id]"><!-- Entry normal mode -->
             <div class="col-md-2 col-xs-12">
                 <button class="btn btn-lg btn-link visible-xs pull-right" style="margin-top: 1em;" ng-click="toggleEntry(entry)"><i class="fa fa-bars"></i></button>
