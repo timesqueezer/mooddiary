@@ -13,7 +13,7 @@ node-packages:
 
 bower-packages:
 	node_modules/.bin/bower --quiet install
-	node_modules/.bin/bower --quiet update
+	#node_modules/.bin/bower --quiet update
 
 clean:
 	rm -rf env
